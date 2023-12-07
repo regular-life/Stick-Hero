@@ -15,7 +15,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 
@@ -26,12 +25,14 @@ public class PlayScreenController {
     public Rectangle EndBlock;
     public Button ActionButton;
     public Rectangle Bridge;
+
     @FXML
     private Text Counter;
     @FXML
     private AnchorPane BackGround;
     @FXML
     private Button AddCherry;
+
     private int cherryCount = 0;
     private static final double MIN_WIDTH = 30.0;
     private static final double MAX_WIDTH = 100.0;
@@ -80,15 +81,7 @@ public class PlayScreenController {
 
         RotateTimeline = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(rotation.angleProperty(), 0)),
-                new KeyFrame(Duration.seconds(0.5), new KeyValue(rotation.angleProperty(), 90)),
-                new KeyFrame(Duration.ZERO, e -> {
-            // This block will be executed when the timeline is reset to the initial state
-            Bridge.setLayoutX(StartBlock.getLayoutX() + StartBlock.getWidth());
-            Bridge.setLayoutY(BackGround.getHeight() - StartBlock.getHeight());
-            Bridge.setHeight(0);
-            Bridge.setVisible(true);
-        })
-        );
+                new KeyFrame(Duration.seconds(1), new KeyValue(rotation.angleProperty(), 90)));
 
         RotateTimeline.setCycleCount(1);
         bridgeGrowthTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -101,9 +94,9 @@ public class PlayScreenController {
         isBBButtonPressed = true;
         RotateTimeline.stop();
         if (isBBButtonPressed) {
+            Bridge.setHeight(0);
             Bridge.setLayoutX(StartBlock.getLayoutX() + StartBlock.getWidth());
             Bridge.setLayoutY(BackGround.getHeight() - StartBlock.getHeight());
-            Bridge.setHeight(0);
             Bridge.setVisible(true);
             bridgeGrowthTimeline.play();
         }
