@@ -5,18 +5,23 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+
+import java.net.BindException;
 
 public class PlayScreenController {
 
@@ -25,6 +30,8 @@ public class PlayScreenController {
     public Rectangle EndBlock;
     public Button ActionButton;
     public Rectangle Bridge;
+    public Rectangle Bridge2;
+    public ImageView Mushroom;
 
     @FXML
     private Text Counter;
@@ -36,11 +43,11 @@ public class PlayScreenController {
     private int cherryCount = 0;
     private static final double MIN_WIDTH = 30.0;
     private static final double MAX_WIDTH = 100.0;
-
     private Timeline bridgeGrowthTimeline;
-    private Timeline RotateTimeline;
+    private Timeline bridgeRotate;
+    private TranslateTransition MushroomTimeline;
 
-    private boolean isBBButtonPressed = false;
+    private Rotate rotate;
 
     public void initialize() {
         Counter.setText("" + cherryCount);
@@ -62,7 +69,13 @@ public class PlayScreenController {
         BB.setOnMousePressed(event -> handleBBButtonPressed());
         BB.setOnMouseReleased(event -> handleBBButtonReleased());
 
-        // Create a timeline for the bridge growth animation
+        Bridge = new Rectangle(10, 10, Color.RED);
+        Bridge.setLayoutX(StartBlock.getLayoutX() + StartBlock.getWidth());
+        Bridge.setLayoutY(StartBlock.getLayoutY() - 10);
+
+        BackGround.getChildren().add(Bridge);
+//        Bridge.setVisible(false);
+
         bridgeGrowthTimeline = new Timeline(
                 new KeyFrame(Duration.seconds(0.1), e -> {
                     Bridge.setHeight(Bridge.getHeight() + 5);
@@ -70,42 +83,48 @@ public class PlayScreenController {
                 })
         );
 
-//        movePivot(Bridge, 10, 10);
+        MushroomTimeline = new TranslateTransition();
+        MushroomTimeline.setNode(Mushroom);
+        MushroomTimeline.setByX(Mushroom.getLayoutX() + EndBlock.getLayoutX() - 50);
+        MushroomTimeline.setDuration(Duration.seconds(5));
+        MushroomTimeline.setCycleCount(1);
 
-        Rotate rotation = new Rotate();
-        rotation.pivotXProperty().bind(Bridge.xProperty().add(Bridge.widthProperty().multiply(0))); // Center X
-        rotation.pivotYProperty().bind(Bridge.yProperty().add(Bridge.heightProperty())); // Center Y
-
-
-        Bridge.getTransforms().add(rotation);
-
-        RotateTimeline = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(rotation.angleProperty(), 0)),
-                new KeyFrame(Duration.seconds(1), new KeyValue(rotation.angleProperty(), 90)));
-
-        RotateTimeline.setCycleCount(1);
         bridgeGrowthTimeline.setCycleCount(Timeline.INDEFINITE);
-    }
-    private void movePivot(Rectangle node, double x, double y){
-        node.getTransforms().add(new Translate(-x,-y));
-        node.setTranslateX(x); node.setTranslateY(y);
+
     }
     private void handleBBButtonPressed() {
-        isBBButtonPressed = true;
-        RotateTimeline.stop();
-        if (isBBButtonPressed) {
-            Bridge.setHeight(0);
-            Bridge.setLayoutX(StartBlock.getLayoutX() + StartBlock.getWidth());
-            Bridge.setLayoutY(BackGround.getHeight() - StartBlock.getHeight());
-            Bridge.setVisible(true);
-            bridgeGrowthTimeline.play();
-        }
+        BackGround.getChildren().remove(Bridge);
+        Bridge = null;
+        Bridge = new Rectangle(10, 10, Color.RED);
+        Bridge.setLayoutX(StartBlock.getLayoutX() + StartBlock.getWidth());
+        Bridge.setLayoutY(StartBlock.getLayoutY() - 10);
+        BackGround.getChildren().add(Bridge);
+        Bridge.setHeight(10);
+        rotate = null;
+        bridgeRotate = null;
+        rotate = new Rotate();
+
+        rotate.pivotXProperty().bind(Bridge.xProperty().add(Bridge.widthProperty().multiply(0))); // Center X
+        rotate.pivotYProperty().bind(Bridge.yProperty().add(Bridge.heightProperty())); // Center Y
+
+        Bridge.getTransforms().add(rotate);
+        bridgeRotate = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(rotate.angleProperty(), 0)),
+                new KeyFrame(Duration.seconds(1), new KeyValue(rotate.angleProperty(), 90))
+        );
+
+        bridgeRotate.setOnFinished(actionEvent -> MushroomTimeline.play());
+
+        bridgeRotate.setCycleCount(1);
+
+        bridgeRotate.stop();
+        bridgeGrowthTimeline.play();
     }
 
     private void handleBBButtonReleased() {
-        isBBButtonPressed = false;
         bridgeGrowthTimeline.stop();
-        RotateTimeline.play();
+        bridgeRotate.play();
+        MushroomTimeline.play();
     }
     private void handleAddCherryAction(ActionEvent event) {
         cherryCount++;
