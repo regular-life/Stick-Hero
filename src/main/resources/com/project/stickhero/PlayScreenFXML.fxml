@@ -20,6 +20,10 @@
       <Text fx:id="Counter" layoutX="320.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" />
       <Rectangle fx:id="StartBlock" arcHeight="5.0" arcWidth="5.0" height="98.0" layoutY="432.0" stroke="BLACK" strokeType="INSIDE" width="96.0" />
       <Rectangle fx:id="EndBlock" arcHeight="5.0" arcWidth="5.0" height="98.0" layoutX="218.0" layoutY="432.0" stroke="BLACK" strokeType="INSIDE" width="62.0" />
-      <Rectangle fx:id="Bridge" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="200.0" layoutX="92.0" layoutY="231.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="8.0" />
+      <ImageView fx:id="Mushroom" fitHeight="150.0" fitWidth="81.0" layoutX="13.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../assets/cute%20mushroom%20idle%20(1).png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
