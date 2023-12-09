@@ -170,13 +170,13 @@ class MultithreadBridge implements Runnable
     private Timeline bridgeLeftTimeline;
     private Double X;
 
-    public MultithreadBridge(Rectangle bridge, Double X) {
-        this.bridge = bridge;
-        this.X = X;
+    public MultithreadBridge(Rectangle bridg, Double x) {
+        this.bridge = bridg;
+        this.X = x;
     }
 
     public Rectangle getBridge() {
-        return bridge;
+        return this.bridge;
     }
 
     public void setBridge(Rectangle bridge) {
@@ -187,7 +187,7 @@ class MultithreadBridge implements Runnable
         try {
             System.out.println("Thread " + Thread.currentThread().getId() + " is running");
             bridgeLeftTimeline = new Timeline(
-                    new KeyFrame(Duration.seconds(2), new KeyValue(bridge.layoutXProperty(), this.X))
+                    new KeyFrame(Duration.seconds(2), new KeyValue(this.bridge.layoutXProperty(), this.X))
             );
             bridgeLeftTimeline.setCycleCount(1);
             bridgeLeftTimeline.play();
