@@ -23,7 +23,8 @@ import javafx.util.Duration;
 
 import java.net.BindException;
 
-public class PlayScreenController {
+public class PlayScreenController
+{
 
     public Button BB;
     public Rectangle StartBlock;
@@ -90,7 +91,9 @@ public class PlayScreenController {
         MushroomTimeline.setCycleCount(1);
 
         bridgeGrowthTimeline.setCycleCount(Timeline.INDEFINITE);
-
+        
+        bridgeGrowthTimeline.stop();
+//        moveBridgesAndMushroomToLeft(Bridge, Bridge2, Mushroom);
     }
     private void handleBBButtonPressed() {
         BackGround.getChildren().remove(Bridge);
@@ -114,7 +117,7 @@ public class PlayScreenController {
         );
 
         bridgeRotate.setOnFinished(actionEvent -> MushroomTimeline.play());
-
+        MushroomTimeline.setOnFinished(actionEvent -> moveBridgesAndMushroomToLeft(Bridge, Bridge2, Mushroom));
         bridgeRotate.setCycleCount(1);
 
         bridgeRotate.stop();
@@ -125,7 +128,9 @@ public class PlayScreenController {
         bridgeGrowthTimeline.stop();
         bridgeRotate.play();
         MushroomTimeline.play();
+        MushroomTimeline.setOnFinished(actionEvent -> moveBridgesAndMushroomToLeft(Bridge, Bridge2, Mushroom));
     }
+
     private void handleAddCherryAction(ActionEvent event) {
         cherryCount++;
         Counter.setText("" + cherryCount);
@@ -143,5 +148,85 @@ public class PlayScreenController {
     }
     private double clamp(double min, double max, double value) {
         return Math.max(min, Math.min(max, value));
+    }
+
+    // function to move the 2 bridges and the mushroom to left (using multi-threading). after second bridge has reached to the point where first bridge was, the player can then again extend stick and move accordingly. use timeline to show the movement.
+    private void moveBridgesAndMushroomToLeft(Rectangle LeftBridge, Rectangle RightBridge, ImageView Mushroom)
+    {
+        Double X = LeftBridge.getLayoutX();
+        Thread left = new Thread(new MultithreadBridge(LeftBridge, X));
+        Thread right = new Thread(new MultithreadBridge(RightBridge, X));
+        Thread mushroom = new Thread(new MultithreadingMushroom(Mushroom, X));
+        left.run();
+        right.run();
+        mushroom.run();
+    }
+
+}
+
+class MultithreadBridge implements Runnable
+{
+    private Rectangle bridge;
+    private Timeline bridgeLeftTimeline;
+    private Double X;
+
+    public MultithreadBridge(Rectangle bridge, Double X) {
+        this.bridge = bridge;
+        this.X = X;
+    }
+
+    public Rectangle getBridge() {
+        return bridge;
+    }
+
+    public void setBridge(Rectangle bridge) {
+        this.bridge = bridge;
+    }
+
+    public void run() {
+        try {
+            System.out.println("Thread " + Thread.currentThread().getId() + " is running");
+            bridgeLeftTimeline = new Timeline(
+                    new KeyFrame(Duration.seconds(2), new KeyValue(bridge.layoutXProperty(), this.X))
+            );
+            bridgeLeftTimeline.setCycleCount(1);
+            bridgeLeftTimeline.play();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
+class MultithreadingMushroom implements Runnable {
+    private ImageView mushroom;
+    private TranslateTransition mushroomTimeline;
+    private Double X ;
+
+    public MultithreadingMushroom(ImageView mushroom, Double X) {
+        this.mushroom = mushroom;
+        this.X = X;
+    }
+
+    public ImageView getMushroom() {
+        return mushroom;
+    }
+
+    public void setMushroom(ImageView mushroom) {
+        this.mushroom = mushroom;
+    }
+
+    public void run() {
+        try {
+            System.out.println("Thread " + Thread.currentThread().getId() + " is running");
+            // movement by timeline
+            mushroomTimeline = new TranslateTransition();
+            mushroomTimeline.setNode(mushroom);
+            mushroomTimeline.setByX(this.X);
+            mushroomTimeline.setDuration(Duration.seconds(5));
+            mushroomTimeline.setCycleCount(1);
+            mushroomTimeline.play();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
