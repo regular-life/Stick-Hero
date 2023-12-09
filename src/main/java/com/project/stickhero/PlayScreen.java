@@ -6,21 +6,22 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class PlayScreen extends Application {
 
+    static Scene scene ;
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage stage) throws IOException {
-            FXMLLoader root = new FXMLLoader(PlayScreen.class.getResource("PlayScreenFXML.fxml"));
-            Scene scene = new Scene(root.load());
-            stage.setTitle("Stick Hero");
-            stage.setScene(scene);
-            stage.show();
-            stage.setResizable(false);
+    public void start(Stage primaryStage) throws IOException {
+        FXMLLoader root = new FXMLLoader(PlayScreen.class.getResource("PlayScreenFXML.fxml"));
+        scene = new Scene(root.load());
+        primaryStage.setTitle("Stick Hero");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        primaryStage.setResizable(false);
     }
+
 }

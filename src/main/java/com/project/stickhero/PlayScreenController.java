@@ -1,6 +1,8 @@
 package com.project.stickhero;
 
+import com.almasb.fxgl.inventory.ItemData;
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,9 +21,12 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.BindException;
+import java.util.Objects;
 
 public class PlayScreenController
 {
@@ -48,6 +53,8 @@ public class PlayScreenController
     private Timeline bridgeGrowthTimeline;
     private Timeline bridgeRotate;
     private TranslateTransition MushroomTimeline;
+    private TranslateTransition startBlockTranslate;
+    private TranslateTransition endBlockTranslate;
 
     private Rotate rotate;
 
@@ -57,7 +64,7 @@ public class PlayScreenController
         Mushroom.setFitWidth(81);
         Mushroom.setFitHeight(70);
         Counter.setText("" + cherryCount);
-        Image backgroundImage = new Image(getClass().getResourceAsStream("/assets/background/back1.png"));
+        Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/assets/background/back1.png")));
         BackgroundImage background = new BackgroundImage(
                 backgroundImage,
                 BackgroundRepeat.NO_REPEAT,
@@ -90,25 +97,60 @@ public class PlayScreenController
         bridgeGrowthTimeline.setCycleCount(Timeline.INDEFINITE);
 
         bridgeGrowthTimeline.stop();
-//        moveBridgesAndMushroomToLeft(Bridge, Bridge2, Mushroom);
     }
-    private void handleBBButtonPressed() {
-        handleActionButtonAction();
 
-        BackGround.getChildren().remove(Bridge);
-        BackGround.getChildren().remove(Mushroom);
-        Bridge = null;
-        Mushroom = null;
-        Mushroom = new ImageView(new Image(getClass().getResourceAsStream("/assets/cute mushroom idle (1).png")));
-        Mushroom.setLayoutX(13);
-        Mushroom.setLayoutY(370);
-        Mushroom.setFitHeight(67.5);
-        Mushroom.setFitWidth(81);
-        Bridge = new Rectangle(10, 10, Color.RED);
-        Bridge.setLayoutX(StartBlock.getLayoutX() + StartBlock.getWidth());
-        Bridge.setLayoutY(StartBlock.getLayoutY() - 10);
-        BackGround.getChildren().add(Bridge);
-        BackGround.getChildren().add(Mushroom);
+    private void moveBlocksLeft(Double XX)
+    {
+        Double distanceBetweenBlocks = EndBlock.getLayoutX() - StartBlock.getLayoutX() - StartBlock.getWidth();
+
+        startBlockTranslate = new TranslateTransition();
+        startBlockTranslate.setNode(StartBlock);
+        startBlockTranslate.setToX(-1 * distanceBetweenBlocks);
+        startBlockTranslate.setDuration(Duration.seconds(2));
+        startBlockTranslate.setCycleCount(1);
+        startBlockTranslate.play();
+
+        endBlockTranslate = new TranslateTransition();
+        endBlockTranslate.setNode(EndBlock);
+        endBlockTranslate.setToX(XX) ;
+        endBlockTranslate.setDuration(Duration.seconds(2));
+        endBlockTranslate.setCycleCount(1);
+        endBlockTranslate.play();
+
+        System.out.println(XX + " but curr pos: " + EndBlock.getLayoutX());
+        StartBlock = EndBlock;
+        handleActionButtonAction();
+    }
+
+    private void moveMushroomLeft(Double mushroomX)
+    {
+        TranslateTransition mushroomTranslate = new TranslateTransition();
+        mushroomTranslate.setNode(Mushroom);
+        mushroomTranslate.setToX(mushroomX);
+        mushroomTranslate.setDuration(Duration.seconds(2));
+        mushroomTranslate.setCycleCount(1);
+        mushroomTranslate.play();
+    }
+
+    private void handleBBButtonPressed()
+    {
+//        Double mushroomX = 13 - EndBlock.getLayoutX();
+//        moveBlocksLeft(mushroomX);
+//        moveMushroomLeft(mushroomX);
+//        BackGround.getChildren().remove(Bridge);
+//        BackGround.getChildren().remove(Mushroom);
+//        Bridge = null;
+//        Mushroom = null;
+//        Mushroom = new ImageView(new Image(getClass().getResourceAsStream("/assets/cute mushroom idle (1).png")));
+//        Mushroom.setLayoutX(13);v
+//        Mushroom.setLayoutY(370);
+//        Mushroom.setFitHeight(67.5);
+//        Mushroom.setFitWidth(81);
+//        Bridge = new Rectangle(10, 10, Color.RED);
+//        Bridge.setLayoutX(StartBlock.getLayoutX() + StartBlock.getWidth());
+//        Bridge.setLayoutY(StartBlock.getLayoutY() - 10);
+//        BackGround.getChildren().add(Bridge);
+//        BackGround.getChildren().add(Mushroom);
 
         Bridge.setHeight(10);
         rotate = null;
@@ -163,12 +205,19 @@ public class PlayScreenController
 
         bridgeGrowthTimeline.stop();
         bridgeRotate.play();
-//        MushroomTimeline.setOnFinished(actionEvent -> moveBridgesAndMushroomToLeft(Bridge, Bridge2, Mushroom));
+//        MushroomTimeline.setOnFinished(actionEvent -> mushroomFall());
+
+        Double mushroomX = 13 - EndBlock.getX();
+        moveBlocksLeft(mushroomX);
+        moveMushroomLeft(mushroomX);
+        BackGround.getChildren().remove(Bridge);
+
     }
 
     private void handleAddCherryAction(ActionEvent event) {
         cherryCount++;
         Counter.setText("" + cherryCount);
+        yourController.setPlayerScore(cherryCount);
 //        System.out.println("Cherry added!");
     }
     private void handleActionButtonAction() {
@@ -186,81 +235,25 @@ public class PlayScreenController
     }
 
     // function to move the 2 bridges and the mushroom to left (using multi-threading). after second bridge has reached to the point where first bridge was, the player can then again extend stick and move accordingly. use timeline to show the movement.
-    private void moveBridgesAndMushroomToLeft(Rectangle LeftBridge, Rectangle RightBridge, ImageView Mushroom)
+
+    public void mushroomFall()
     {
-        Double X = LeftBridge.getLayoutX();
-        Thread left = new Thread(new MultithreadBridge(LeftBridge, X));
-        Thread right = new Thread(new MultithreadBridge(RightBridge, X));
-        Thread mushroom = new Thread(new MultithreadingMushroom(Mushroom, X));
-        left.run();
-        right.run();
-        mushroom.run();
-    }
-}
-
-class MultithreadBridge implements Runnable
-{
-    private Rectangle bridge;
-    private Timeline bridgeLeftTimeline;
-    private Double X;
-
-    public MultithreadBridge(Rectangle bridge, Double X) {
-        this.bridge = bridge;
-        this.X = X;
-    }
-
-    public Rectangle getBridge() {
-        return bridge;
-    }
-
-    public void setBridge(Rectangle bridge) {
-        this.bridge = bridge;
-    }
-
-    public void run() {
-        try {
-            System.out.println("Thread " + Thread.currentThread().getId() + " is running");
-            bridgeLeftTimeline = new Timeline(
-                    new KeyFrame(Duration.seconds(2), new KeyValue(bridge.layoutXProperty(), this.X))
-            );
-            bridgeLeftTimeline.setCycleCount(1);
-            bridgeLeftTimeline.play();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-}
-
-class MultithreadingMushroom implements Runnable {
-    private ImageView mushroom;
-    private TranslateTransition mushroomTimeline;
-    private Double X ;
-
-    public MultithreadingMushroom(ImageView mushroom, Double X) {
-        this.mushroom = mushroom;
-        this.X = X;
-    }
-
-    public ImageView getMushroom() {
-        return mushroom;
-    }
-
-    public void setMushroom(ImageView mushroom) {
-        this.mushroom = mushroom;
-    }
-
-    public void run() {
-        try {
-            System.out.println("Thread " + Thread.currentThread().getId() + " is running");
-            // movement by timeline
-            mushroomTimeline = new TranslateTransition();
-            mushroomTimeline.setNode(mushroom);
-            mushroomTimeline.setByX(this.X);
-            mushroomTimeline.setDuration(Duration.seconds(5));
-            mushroomTimeline.setCycleCount(1);
-            mushroomTimeline.play();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+//        MushroomTimeline.stop();
+        MushroomTimeline = new TranslateTransition();
+        MushroomTimeline.setNode(Mushroom);
+        MushroomTimeline.setByY(BackGround.getHeight() - Mushroom.getFitHeight());
+        MushroomTimeline.setDuration(Duration.seconds(1.5));
+        MushroomTimeline.setCycleCount(1);
+        MushroomTimeline.play();
+        MushroomTimeline.setOnFinished(actionEvent -> {
+            System.out.println("Game Over! Mushroom has reached the ground");
+//            try
+//            {
+//                showGameOverScreen(cherryCount);
+//            }
+//            catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+        });
     }
 }
