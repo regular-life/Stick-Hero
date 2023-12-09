@@ -5,12 +5,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="BackGround" prefHeight="530.0" prefWidth="368.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.stickhero.PlayScreenController">
    <children>
       <Button fx:id="AddCherry" layoutX="53.0" layoutY="207.0" mnemonicParsing="false" text="IC" />
-      <Button fx:id="ActionButton" layoutX="153.0" layoutY="207.0" mnemonicParsing="false" text="AC" />
       <Button fx:id="BB" layoutX="249.0" layoutY="207.0" mnemonicParsing="false" text="Bridge" />
       <ImageView fx:id="Banana" fitHeight="48.0" fitWidth="42.0" layoutX="269.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -25,5 +25,10 @@
             <Image url="@../../../assets/cute%20mushroom%20idle%20(1).png" />
          </image>
       </ImageView>
+      <Text fx:id="Score" layoutX="154.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" wrappingWidth="61.0">
+         <font>
+            <Font size="35.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>
