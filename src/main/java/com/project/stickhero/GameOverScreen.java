@@ -2,14 +2,16 @@ package com.project.stickhero;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class PlayScreen extends Application {
+public class GameOverScreen extends Application {
 
-    static Scene scene ;
+    Scene scene ;
     public static void main(String[] args) {
         launch(args);
     }
@@ -17,7 +19,7 @@ public class PlayScreen extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException
     {
-        FXMLLoader root = new FXMLLoader(PlayScreen.class.getResource("PlayScreenFXML.fxml"));
+        FXMLLoader root = new FXMLLoader(getClass().getResource("GameOverScreenFXML.fxml"));
         scene = new Scene(root.load());
         primaryStage.setTitle("Stick Hero");
         primaryStage.setScene(scene);

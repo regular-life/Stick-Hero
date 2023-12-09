@@ -1,37 +1,32 @@
 package com.project.stickhero;
 
-import com.almasb.fxgl.inventory.ItemData;
-import javafx.animation.*;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
-import javafx.scene.SnapshotResult;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.io.IOException;
-import java.net.BindException;
 import java.util.Objects;
+import java.util.Random;
 
 public class PlayScreenController
 {
-
+    public boolean walking = false;
+    public boolean isFlipped = false;
+    public ImageView Banana1;
     public Button BB;
     public Rectangle StartBlock;
     public Rectangle EndBlock;
@@ -40,15 +35,17 @@ public class PlayScreenController
     public ImageView Mushroom;
     public Text Score;
 
+    public Button BB2;
+
     @FXML
     private Text Counter;
     @FXML
     private AnchorPane BackGround;
     @FXML
     private Button AddCherry;
-
+    private Boolean CherryCollect;
     private int cherryCount = 0;
-    private int score = 0;
+    public static int score = 0;
     private static final double MIN_WIDTH = 75.0;
     private static final double MAX_WIDTH = 100.0;
     private Timeline bridgeGrowthTimeline;
@@ -116,7 +113,7 @@ public class PlayScreenController
     }
 
     public void setScore(int score) {
-        this.score = score;
+        PlayScreenController.score = score;
     }
 
     public Timeline getBridgeGrowthTimeline() {
@@ -212,9 +209,12 @@ public class PlayScreenController
     }
 
     public void initialize() {
+        CherryCollect = false;
 
+        Mushroom.setLayoutX(23);
+        Mushroom.setLayoutY(370);
+        Mushroom.setFitHeight(67.5);
         Mushroom.setFitWidth(81);
-        Mushroom.setFitHeight(70);
         Counter.setText("" + cherryCount);
         Image backgroundImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/assets/background/back1.png")));
         BackgroundImage background = new BackgroundImage(
@@ -228,10 +228,10 @@ public class PlayScreenController
         Background backgroundObject = new Background(background);
         BackGround.setBackground(backgroundObject);
 
-        AddCherry.setOnAction(this::handleAddCherryAction);
 
         BB.setOnMousePressed(event -> handleBBButtonPressed());
         BB.setOnMouseReleased(event -> handleBBButtonReleased());
+        BB2.setOnMousePressed(mouseEvent -> Change_side());
 
         StartBlock = new Rectangle();
         StartBlock.setLayoutX(0);
@@ -242,7 +242,7 @@ public class PlayScreenController
         StartBlock.toFront();
 
         EndBlock = new Rectangle();
-        EndBlock.setLayoutX(120);
+        EndBlock.setLayoutX(240);
         EndBlock.setLayoutY(432);
         EndBlock.setWidth(50);
         EndBlock.setHeight(100);
@@ -255,11 +255,13 @@ public class PlayScreenController
         Bridge.setLayoutX(96);
         Bridge.setLayoutY(422);
 
+        CherryMaker();
+
         BackGround.getChildren().add(Bridge);
 //        Bridge.setVisible(false);
 
         bridgeGrowthTimeline = new Timeline(
-                new KeyFrame(Duration.seconds(0.1), e -> {
+                new KeyFrame(Duration.seconds(0.05), e -> {
                     Bridge.setHeight(Bridge.getHeight() + 5);
                     Bridge.setLayoutY(Bridge.getLayoutY() - 5);
                 })
@@ -281,7 +283,7 @@ public class PlayScreenController
         endBlockTranslate = new TranslateTransition();
         endBlockTranslate.setNode(EndBlock);
         endBlockTranslate.setByX(XX);
-        endBlockTranslate.setDuration(Duration.seconds(2));
+        endBlockTranslate.setDuration(Duration.seconds(1));
         endBlockTranslate.setCycleCount(1);
         endBlockTranslate.play();
 
@@ -295,9 +297,12 @@ public class PlayScreenController
         TranslateTransition mushroomTranslate = new TranslateTransition();
         mushroomTranslate.setNode(Mushroom);
         mushroomTranslate.setByX(mushroomX);
-        mushroomTranslate.setDuration(Duration.seconds(2));
+        mushroomTranslate.setDuration(Duration.seconds(1));
         mushroomTranslate.setCycleCount(1);
-        mushroomTranslate.setOnFinished(actionEvent -> handleActionButtonAction());
+        mushroomTranslate.setOnFinished(actionEvent -> {
+            Banana1.setVisible(false);
+            handleActionButtonAction();
+        });
         mushroomTranslate.play();
     }
 
@@ -332,7 +337,7 @@ public class PlayScreenController
 
         bridgeRotate = new Timeline(
                 new KeyFrame(Duration.ZERO, new KeyValue(rotate.angleProperty(), 0)),
-                new KeyFrame(Duration.seconds(1), new KeyValue(rotate.angleProperty(), 90))
+                new KeyFrame(Duration.seconds(0.5), new KeyValue(rotate.angleProperty(), 90))
         );
 //        MushroomTimeline.setOnFinished(actionEvent -> moveBridgesAndMushroomToLeft(Bridge, Bridge2, Mushroom));
         bridgeRotate.setCycleCount(1);
@@ -342,6 +347,7 @@ public class PlayScreenController
     }
 
     private void handleBBButtonReleased() {
+
         double endBlockMiddle = EndBlock.getLayoutX() + EndBlock.getWidth() / 2;
         double distanceToMiddle = endBlockMiddle - Mushroom.getLayoutX() - Mushroom.getFitWidth() / 2;
 //        System.out.println(Bridge.getLayoutX());
@@ -359,12 +365,24 @@ public class PlayScreenController
         }
         MushroomTimeline.setDuration(Duration.seconds(2));
         MushroomTimeline.setCycleCount(1);
+        Mushroom.translateXProperty().addListener((Observable)->{
+            if(Mushroom.getBoundsInParent().intersects(Banana1.getBoundsInParent())){
+                CherryCollect = true;
+                Banana1.setVisible(false);
+            }
+        });
         MushroomTimeline.setOnFinished(actionEvent -> {
-            if(success){
+            walking = false;
+            if(success  && !isFlipped){
+                if(CherryCollect) {
+                    handleAddCherryAction();
+                    CherryCollect = false;
+                }
                 score++;
                 Score.setText("" + score);
                 BackGround.getChildren().remove(Bridge);
                 double xx = 96 - EndBlock.getWidth() - EndBlock.getLayoutX();
+                Banana1.setVisible(false);
                 moveBlocksLeft(xx);
                 moveMushroomLeft(xx);
             }
@@ -376,22 +394,35 @@ public class PlayScreenController
 
         bridgeRotate.setOnFinished(actionEvent -> {
             MushroomTimeline.play();
+            walking = true;
         });
 
         bridgeGrowthTimeline.stop();
         bridgeRotate.play();
     }
 
-    private void handleAddCherryAction(ActionEvent event) {
+    private void Change_side(){
+        if(walking) {
+            if(!isFlipped) {
+                Mushroom.setLayoutY(Mushroom.getLayoutY() + Mushroom.getFitHeight());
+                isFlipped = !isFlipped;
+            } else {
+                Mushroom.setLayoutY(Mushroom.getLayoutY() - Mushroom.getFitHeight());
+                isFlipped = !isFlipped;
+            }
+            Mushroom.setRotate(Mushroom.getRotate() + 180);
+        }
+    }
+    private void handleAddCherryAction() {
         cherryCount++;
         Counter.setText("" + cherryCount);
-        yourController.setPlayerScore(cherryCount);
+//        yourController.setPlayerScore(cherryCount);
     }
     private void handleActionButtonAction() {
 
-        double maxWidth = BackGround.getWidth() - StartBlock.getWidth() - 10;
-        double randomWidth = clamp(MIN_WIDTH, MAX_WIDTH, Math.random() * maxWidth);
-        double randomPosition = (Math.random() *  250) + 96;
+        Random random = new Random();
+        double randomWidth = random.nextDouble(56 , 100);
+        double rr = random.nextDouble(StartBlock.getLayoutX() + StartBlock.getWidth() + 60,300);
 
         BackGround.getChildren().remove(StartBlock);
         BackGround.getChildren().remove(EndBlock);
@@ -405,7 +436,7 @@ public class PlayScreenController
         StartBlock.toFront();
 
         EndBlock = new Rectangle();
-        EndBlock.setLayoutX(randomPosition);
+        EndBlock.setLayoutX(rr);
         EndBlock.setLayoutY(432);
         EndBlock.setWidth(randomWidth);
         EndBlock.setHeight(100);
@@ -413,7 +444,7 @@ public class PlayScreenController
         EndBlock.toFront();
         BackGround.getChildren().add(StartBlock);
         BackGround.getChildren().add(EndBlock);
-
+        CherryMaker();
 //        System.out.println("ActionButton clicked! EndRectangle width: " + randomWidth + ", position: " + randomPosition);
     }
     private double clamp(double min, double max, double value) {
@@ -424,6 +455,7 @@ public class PlayScreenController
 
     public void mushroomFall()
     {
+        score = Integer.parseInt(Score.getText()) ;
         MushroomTimeline = new TranslateTransition();
         MushroomTimeline.setNode(Mushroom);
         MushroomTimeline.setByY(BackGround.getHeight() - Mushroom.getFitHeight());
@@ -432,6 +464,20 @@ public class PlayScreenController
         MushroomTimeline.play();
         MushroomTimeline.setOnFinished(actionEvent -> {
             System.out.println("Game Over! Mushroom has reached the ground");
+            // gameover karna h
         });
+    }
+    public void CherryMaker() {
+        BackGround.getChildren().remove(Banana1);
+        Banana1 = new ImageView(new Image(getClass().getResourceAsStream("/assets/Banana.png")));
+        Banana1.setVisible(true);
+        Random random = new Random();
+        double randomValue = random.nextDouble(StartBlock.getWidth() + StartBlock.getLayoutX(), EndBlock.getLayoutX()-30);
+        Banana1.setLayoutX(randomValue);
+        Banana1.setLayoutY(440);
+        Banana1.setFitHeight(20);
+        Banana1.setFitWidth(20);
+        Banana1.toFront();
+        BackGround.getChildren().add(Banana1);
     }
 }
