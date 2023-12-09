@@ -23,5 +23,4 @@ public class PlayScreen extends Application {
         primaryStage.show();
         primaryStage.setResizable(false);
     }
-
 }
