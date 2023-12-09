@@ -8,7 +8,7 @@
 <AnchorPane prefHeight="530.0" prefWidth="368.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.stickhero.GameOverScreenController">
    <children>
       <!-- GAME OVER text -->
-      <Text layoutX="17.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GAME OVER" textAlignment="CENTER" wrappingWidth="334.30126953125">
+      <Text fontSmoothingType="LCD" layoutX="17.0" layoutY="130.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="0.0" text="GAME OVER" textAlignment="CENTER" wrappingWidth="334.30126953125">
          <font>
             <Font name="Bell MT" size="40.0" /> <!-- Decreased font size -->
          </font>
@@ -19,7 +19,7 @@
 
       <!-- Quit button -->
       <Button fx:id="Quit" layoutX="232.0" layoutY="399.0" onMouseClicked="#handleQuit" style="-fx-font-size: 18;" text="Quit" />
-      <Text layoutX="57.0" layoutY="225.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score: ">
+      <Text layoutX="57.0" layoutY="225.0" stroke="TRANSPARENT" strokeType="OUTSIDE" strokeWidth="0.0" text="Score: ">
          <font>
             <Font name="Bell MT" size="26.0" />
          </font>
@@ -29,7 +29,7 @@
             <Font name="Bell MT" size="26.0" />
          </font>
       </Text>
-      <Button fx:id="Revive" layoutX="101.0" layoutY="327.0" mnemonicParsing="false" onMouseClicked="#handleRevive" text="REVIVE" textAlignment="CENTER">
+      <Button fx:id="Revive" layoutX="101.0" layoutY="327.0" mnemonicParsing="false" onAction="#handleRevive" text="REVIVE" textAlignment="CENTER">
          <font>
             <Font name="Bell MT" size="33.0" />
          </font>

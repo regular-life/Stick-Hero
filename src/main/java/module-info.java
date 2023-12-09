@@ -8,6 +8,7 @@ module com.project.stickhero {
 //    requires org.kordamp.ikonli.javafx;
 //    requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires javafx.media;
 
     opens com.project.stickhero to javafx.fxml;
     exports com.project.stickhero;

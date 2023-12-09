@@ -6,12 +6,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static com.project.stickhero.PlayScreenController.cherries;
 import static com.project.stickhero.PlayScreenController.score;
 
 public class GameOverScreenController
@@ -23,7 +25,7 @@ public class GameOverScreenController
     private Text scoreText;
 
     @FXML
-    private Text highestscoreText;
+    private Text highestScoreText;
 
     @FXML
     private Stage stage ;
@@ -56,38 +58,39 @@ public class GameOverScreenController
         this.scene = scene;
     }
 
-    public Text getscoreText() {
+    public Text getScoreText() {
         return scoreText;
     }
 
-    public void setscoreText(Text scoreText) {
+    public void setScoreText(Text scoreText) {
         this.scoreText = scoreText;
     }
 
-    public Text getHighestscoreText() {
-        return highestscoreText;
+    public Text getHighestScoreText() {
+        return highestScoreText;
     }
 
-    public void setHighestscoreText(Text highestscoreText) {
-        this.highestscoreText = highestscoreText;
+    public void setHighestScoreText(Text highestScoreText) {
+        this.highestScoreText = highestScoreText;
     }
 
     public void initialize()
     {
-
-        highestscoreText.setText(TextFileHandler.readDataFromTextFile());
-        System.out.println(highestscoreText.getText());
-        scoreText = new Text(String.valueOf(score));
+        highestScoreText.setText(TextFileHandler.readDataFromTextFile());
+        System.out.println(highestScoreText.getText());
+        scoreText.setText(String.valueOf(score));
     }
 
     @FXML
     public void handleRestart(ActionEvent event) throws IOException
     {
-        if (score > Integer.parseInt(highestscoreText.getText()))
+        if (score > Integer.parseInt(highestScoreText.getText()))
         {
             TextFileHandler.addDataToTextFile(String.valueOf(score));
+            highestScoreText.setText(String.valueOf(score));
         }
-
+        score = 0 ;
+        cherries = 0 ;
 //        System.out.println("restart");
         Parent roo = FXMLLoader.load(getClass().getResource("PlayScreenFXML.fxml"));
 //        System.out.println("Fuck");
@@ -100,17 +103,40 @@ public class GameOverScreenController
     @FXML
     public void handleQuit()
     {
-        if (score > Integer.parseInt(highestscoreText.getText()))
+        if (score > Integer.parseInt(highestScoreText.getText()))
         {
             TextFileHandler.addDataToTextFile(String.valueOf(score));
+            highestScoreText.setText(String.valueOf(score));
         }
         System.exit(0);
     }
 
     @FXML
-    public void handleRevive()
+    public void handleRevive(ActionEvent event) throws IOException
     {
-        // to do
+        if (cherries >= 5)
+        {
+            cherries -= 5 ;
+            Parent roo = FXMLLoader.load(getClass().getResource("PlayScreenFXML.fxml"));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(roo);
+            stage.setScene(scene);
+            stage.show();
+        }
+        else
+        {
+            // add popup which says "You need atleast 5 bananas to Revive!"
+            showPopup("You need atleast 5 cherries to Revive!");
+        }
+    }
+
+    private void showPopup(String message)
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
 

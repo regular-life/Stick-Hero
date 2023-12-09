@@ -7,11 +7,6 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="530.0" minWidth="368.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.project.stickhero.MainScreenController">
-<!--   <background>-->
-<!--      <Background>-->
-<!--         <BackgroundImage fitHeight="100%" fitWidth="100%" repeat="NO_REPEAT" source="@../../../assets/background/back1.png" />-->
-<!--      </Background>-->
-<!--   </background>-->
    <children>
       <ImageView fitHeight="530.0" fitWidth="600.0" layoutX="-480.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true" scaleX="3.5" scaleY="3.5">
          <image>

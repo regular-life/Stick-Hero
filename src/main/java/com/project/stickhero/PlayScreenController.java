@@ -1,5 +1,11 @@
 package com.project.stickhero;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.stage.Stage;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -19,6 +25,8 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.net.URL;
 import java.util.Objects;
 import java.util.Random;
 
@@ -45,6 +53,7 @@ public class PlayScreenController
     private Button AddCherry;
     private Boolean CherryCollect;
     private int cherryCount = 0;
+    public static int cherries ;
     public static int score = 0;
     private static final double MIN_WIDTH = 75.0;
     private static final double MAX_WIDTH = 100.0;
@@ -208,7 +217,19 @@ public class PlayScreenController
         this.cherryCount = cherryCount;
     }
 
+    private static MediaPlayer createPlayer(String resourcePath) {
+        URL mediaUrl = MainScreen.class.getResource(resourcePath);
+        if (mediaUrl == null) {
+            throw new RuntimeException("Resource not found: " + resourcePath);
+        }
+        Media sound = new Media(mediaUrl.toString());
+        return new MediaPlayer(sound);
+    }
+
     public void initialize() {
+
+        cherryCount = cherries ;
+
         CherryCollect = false;
 
         Mushroom.setLayoutX(23);
@@ -308,6 +329,7 @@ public class PlayScreenController
 
     private void handleBBButtonPressed()
     {
+        isFlipped = false;
 //        System.out.println(EndBlock.getLayoutY());
         BackGround.getChildren().remove(Bridge);
         BackGround.getChildren().remove(Mushroom);
@@ -415,6 +437,7 @@ public class PlayScreenController
     }
     private void handleAddCherryAction() {
         cherryCount++;
+        cherries ++;
         Counter.setText("" + cherryCount);
 //        yourController.setPlayerScore(cherryCount);
     }
@@ -455,6 +478,10 @@ public class PlayScreenController
 
     public void mushroomFall()
     {
+//        String resourcePath = "/assets/sound/fall.ogg";
+//        MediaPlayer mediaPlayer = createPlayer(resourcePath);
+//        mediaPlayer.play();
+
         score = Integer.parseInt(Score.getText()) ;
         MushroomTimeline = new TranslateTransition();
         MushroomTimeline.setNode(Mushroom);
@@ -464,7 +491,18 @@ public class PlayScreenController
         MushroomTimeline.play();
         MushroomTimeline.setOnFinished(actionEvent -> {
             System.out.println("Game Over! Mushroom has reached the ground");
-            // gameover karna h
+            try {
+                // close current stage
+                Stage stage = (Stage) BB.getScene().getWindow();
+                FXMLLoader root = new FXMLLoader(getClass().getResource("GameOverScreenFXML.fxml"));
+                Scene scene = new Scene(root.load());
+                stage.setTitle("Game Over");
+                stage.setScene(scene);
+                stage.show();
+                stage.setResizable(false);
+            } catch (Exception e) {
+                e.getMessage();
+            }
         });
     }
     public void CherryMaker() {

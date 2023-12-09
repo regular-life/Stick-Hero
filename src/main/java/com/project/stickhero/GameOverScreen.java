@@ -21,7 +21,7 @@ public class GameOverScreen extends Application {
     {
         FXMLLoader root = new FXMLLoader(getClass().getResource("GameOverScreenFXML.fxml"));
         scene = new Scene(root.load());
-        primaryStage.setTitle("Stick Hero");
+        primaryStage.setTitle("Game Over");
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setResizable(false);
