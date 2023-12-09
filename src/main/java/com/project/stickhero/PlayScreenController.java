@@ -5,6 +5,7 @@ import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.SnapshotResult;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -62,7 +63,156 @@ public class PlayScreenController
 
     boolean success = false;
 
+    public Button getBB() {
+        return BB;
+    }
+
+    public void setBB(Button BB) {
+        this.BB = BB;
+    }
+
+    public Rectangle getStartBlock() {
+        return StartBlock;
+    }
+
+    public void setStartBlock(Rectangle startBlock) {
+        StartBlock = startBlock;
+    }
+
+    public Rectangle getEndBlock() {
+        return EndBlock;
+    }
+
+    public void setEndBlock(Rectangle endBlock) {
+        EndBlock = endBlock;
+    }
+
+    public Rectangle getBridge() {
+        return Bridge;
+    }
+
+    public void setBridge(Rectangle bridge) {
+        Bridge = bridge;
+    }
+
+    public Rectangle getBridge2() {
+        return Bridge2;
+    }
+
+    public void setBridge2(Rectangle bridge2) {
+        Bridge2 = bridge2;
+    }
+
+    public ImageView getMushroom() {
+        return Mushroom;
+    }
+
+    public void setMushroom(ImageView mushroom) {
+        Mushroom = mushroom;
+    }
+
+    public Text getScore() {
+        return Score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public Timeline getBridgeGrowthTimeline() {
+        return bridgeGrowthTimeline;
+    }
+
+    public void setBridgeGrowthTimeline(Timeline bridgeGrowthTimeline) {
+        this.bridgeGrowthTimeline = bridgeGrowthTimeline;
+    }
+
+    public Timeline getBridgeRotate() {
+        return bridgeRotate;
+    }
+
+    public void setBridgeRotate(Timeline bridgeRotate) {
+        this.bridgeRotate = bridgeRotate;
+    }
+
+    public TranslateTransition getMushroomTimeline() {
+        return MushroomTimeline;
+    }
+
+    public void setMushroomTimeline(TranslateTransition mushroomTimeline) {
+        MushroomTimeline = mushroomTimeline;
+    }
+
+    public TranslateTransition getStartBlockTranslate() {
+        return startBlockTranslate;
+    }
+
+    public void setStartBlockTranslate(TranslateTransition startBlockTranslate) {
+        this.startBlockTranslate = startBlockTranslate;
+    }
+
+    public TranslateTransition getEndBlockTranslate() {
+        return endBlockTranslate;
+    }
+
+    public void setEndBlockTranslate(TranslateTransition endBlockTranslate) {
+        this.endBlockTranslate = endBlockTranslate;
+    }
+
+    public Rotate getRotate() {
+        return rotate;
+    }
+
+    public void setRotate(Rotate rotate) {
+        this.rotate = rotate;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public void setScore(Text score) {
+        Score = score;
+    }
+
+    public Text getCounter() {
+        return Counter;
+    }
+
+    public void setCounter(Text counter) {
+        Counter = counter;
+    }
+
+    public AnchorPane getBackGround() {
+        return BackGround;
+    }
+
+    public void setBackGround(AnchorPane backGround) {
+        BackGround = backGround;
+    }
+
+    public Button getAddCherry() {
+        return AddCherry;
+    }
+
+    public void setAddCherry(Button addCherry) {
+        AddCherry = addCherry;
+    }
+
+    public int getCherryCount() {
+        return cherryCount;
+    }
+
+    public void setCherryCount(int cherryCount) {
+        this.cherryCount = cherryCount;
+    }
+
     public void initialize() {
+
         Mushroom.setFitWidth(81);
         Mushroom.setFitHeight(70);
         Counter.setText("" + cherryCount);
@@ -83,9 +233,27 @@ public class PlayScreenController
         BB.setOnMousePressed(event -> handleBBButtonPressed());
         BB.setOnMouseReleased(event -> handleBBButtonReleased());
 
+        StartBlock = new Rectangle();
+        StartBlock.setLayoutX(0);
+        StartBlock.setLayoutY(432);
+        StartBlock.setWidth(100);
+        StartBlock.setHeight(100);
+        StartBlock.setFill(Color.BLACK);
+        StartBlock.toFront();
+
+        EndBlock = new Rectangle();
+        EndBlock.setLayoutX(120);
+        EndBlock.setLayoutY(432);
+        EndBlock.setWidth(50);
+        EndBlock.setHeight(100);
+        EndBlock.setFill(Color.BLACK);
+        EndBlock.toFront();
+        BackGround.getChildren().add(StartBlock);
+        BackGround.getChildren().add(EndBlock);
+
         Bridge = new Rectangle(10, 10, Color.RED);
-        Bridge.setLayoutX(StartBlock.getLayoutX() + StartBlock.getWidth());
-        Bridge.setLayoutY(StartBlock.getLayoutY() - 10);
+        Bridge.setLayoutX(96);
+        Bridge.setLayoutY(422);
 
         BackGround.getChildren().add(Bridge);
 //        Bridge.setVisible(false);
@@ -129,6 +297,7 @@ public class PlayScreenController
         mushroomTranslate.setByX(mushroomX);
         mushroomTranslate.setDuration(Duration.seconds(2));
         mushroomTranslate.setCycleCount(1);
+        mushroomTranslate.setOnFinished(actionEvent -> handleActionButtonAction());
         mushroomTranslate.play();
     }
 
@@ -195,7 +364,7 @@ public class PlayScreenController
                 score++;
                 Score.setText("" + score);
                 BackGround.getChildren().remove(Bridge);
-                double xx = 3 - EndBlock.getLayoutX() + (EndBlock.getWidth()/2) ;
+                double xx = 96 - EndBlock.getWidth() - EndBlock.getLayoutX();
                 moveBlocksLeft(xx);
                 moveMushroomLeft(xx);
             }
@@ -219,15 +388,31 @@ public class PlayScreenController
         yourController.setPlayerScore(cherryCount);
     }
     private void handleActionButtonAction() {
+
         double maxWidth = BackGround.getWidth() - StartBlock.getWidth() - 10;
         double randomWidth = clamp(MIN_WIDTH, MAX_WIDTH, Math.random() * maxWidth);
-        double randomPosition = Math.random() * (maxWidth - randomWidth);
+        double randomPosition = (Math.random() *  250) + 96;
+
+        BackGround.getChildren().remove(StartBlock);
         BackGround.getChildren().remove(EndBlock);
-        EndBlock = null;
+
+        StartBlock = new Rectangle();
+        StartBlock.setLayoutX(96 - EndBlock.getWidth());
+        StartBlock.setLayoutY(432);
+        StartBlock.setWidth(EndBlock.getWidth());
+        StartBlock.setHeight(100);
+        StartBlock.setFill(Color.BLACK);
+        StartBlock.toFront();
+
         EndBlock = new Rectangle();
+        EndBlock.setLayoutX(randomPosition);
         EndBlock.setLayoutY(432);
         EndBlock.setWidth(randomWidth);
-        EndBlock.setLayoutX(StartBlock.getWidth() + 10 + randomPosition);
+        EndBlock.setHeight(100);
+        EndBlock.setFill(Color.BLACK);
+        EndBlock.toFront();
+        BackGround.getChildren().add(StartBlock);
+        BackGround.getChildren().add(EndBlock);
 
 //        System.out.println("ActionButton clicked! EndRectangle width: " + randomWidth + ", position: " + randomPosition);
     }

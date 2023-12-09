@@ -13,8 +13,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class StartController extends Application {
-    public AnchorPane Main_Background;
-    private Scene scene;
+    public static AnchorPane Main_Background;
+    private static Scene scene;
     @FXML
     private Text matchesPlayedText;
 
@@ -30,7 +30,7 @@ public class StartController extends Application {
     }
 
     @FXML
-    private void handleStartButton() throws IOException
+    static void handleStartButton() throws IOException
     {
         FXMLLoader root = new FXMLLoader(PlayScreen.class.getResource("PlayScreenFXML.fxml"));
         scene = new Scene(root.load());
@@ -56,9 +56,6 @@ public class StartController extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         primaryStage.setResizable(false);
-//
-//        @FXML
-//                public void
     }
 
     @FXML
@@ -78,5 +75,4 @@ public class StartController extends Application {
         primaryStage.show();
         primaryStage.setResizable(false);
     }
-
 }
