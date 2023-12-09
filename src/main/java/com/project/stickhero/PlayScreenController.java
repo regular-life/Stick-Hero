@@ -13,15 +13,10 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
 import javafx.util.Duration;
-
-import java.net.BindException;
 
 public class PlayScreenController
 {
@@ -116,8 +111,8 @@ public class PlayScreenController
                 new KeyFrame(Duration.seconds(1), new KeyValue(rotate.angleProperty(), 90))
         );
 
-        bridgeRotate.setOnFinished(actionEvent -> MushroomTimeline.play());
-        MushroomTimeline.setOnFinished(actionEvent -> moveBridgesAndMushroomToLeft(Bridge, Bridge2, Mushroom));
+//        bridgeRotate.setOnFinished(actionEvent -> MushroomTimeline.play());
+//        MushroomTimeline.setOnFinished(actionEvent -> moveBridgesAndMushroomToLeft(Bridge, Bridge2, Mushroom));
         bridgeRotate.setCycleCount(1);
 
         bridgeRotate.stop();
@@ -167,7 +162,7 @@ public class PlayScreenController
 class MultithreadBridge implements Runnable
 {
     private Rectangle bridge;
-    private Timeline bridgeLeftTimeline;
+    private TranslateTransition bridgeLeftTimeline;
     private Double X;
 
     public MultithreadBridge(Rectangle bridg, Double x) {
@@ -183,12 +178,14 @@ class MultithreadBridge implements Runnable
         this.bridge = bridge;
     }
 
+    @Override
     public void run() {
         try {
             System.out.println("Thread " + Thread.currentThread().getId() + " is running");
-            bridgeLeftTimeline = new Timeline(
-                    new KeyFrame(Duration.seconds(2), new KeyValue(this.bridge.layoutXProperty(), this.X))
-            );
+            bridgeLeftTimeline = new TranslateTransition();
+            bridgeLeftTimeline.setNode(this.bridge);
+            bridgeLeftTimeline.setByX(this.X);
+            bridgeLeftTimeline.setDuration(Duration.seconds(5));
             bridgeLeftTimeline.setCycleCount(1);
             bridgeLeftTimeline.play();
         } catch (Exception e) {
@@ -215,6 +212,7 @@ class MultithreadingMushroom implements Runnable {
         this.mushroom = mushroom;
     }
 
+    @Override
     public void run() {
         try {
             System.out.println("Thread " + Thread.currentThread().getId() + " is running");
