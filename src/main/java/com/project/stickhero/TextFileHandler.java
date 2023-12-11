@@ -7,7 +7,7 @@ public class TextFileHandler
 
 //    private static final String TEXT_FILE_PATH = "/home/yash/Downloads/Stick-Hero/src/main/java/com/project/stickhero/HighestScore";
 
-    private static final String TEXT_FILE_PATH = System.getProperty("user.home") + "/Downloads/Stick-Hero/src/main/java/com/project/stickhero/HighestScore";
+    private static final String TEXT_FILE_PATH = System.getProperty("user.dir") + "/src/main/java/com/project/stickhero/HighestScore";
 
     public static void addDataToTextFile(String data)
     {
@@ -40,7 +40,6 @@ public class TextFileHandler
     public static void main(String[] args)
     {
         System.out.println(readDataFromTextFile());
-        // convert string to int
         int sc = Integer.parseInt(readDataFromTextFile());
         System.out.println(sc);
     }
