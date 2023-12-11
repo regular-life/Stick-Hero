@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5d348cc0-360b-4b99-ab40-7011445430ca" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/project/stickhero/Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/project/ReadMe.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PlayScreenStyle.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/stickhero/GameOverScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/stickhero/GameOverScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/stickhero/GameOverScreenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/stickhero/GameOverScreenController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/stickhero/HighestScore" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/stickhero/HighestScore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/stickhero/MainScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/stickhero/MainScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/stickhero/MainScreenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/stickhero/MainScreenController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/stickhero/PlayScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/stickhero/PlayScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/stickhero/PlayScreenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/stickhero/PlayScreenController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/project/stickhero/TextFileHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/project/stickhero/TextFileHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/project/stickhero/PlayScreenFXML.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/project/stickhero/PlayScreenFXML.fxml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/java/com/project/stickhero/GameOverScreenController.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/main/java/com/project/stickhero/Tests/Test.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="2ZNlY6Lg2nVewDrH5Wu0j5j83YB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/yash/Downloads/Stick-Hero"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.project.stickhero" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5d348cc0-360b-4b99-ab40-7011445430ca" name="Changes" comment="" />
+      <created>1702270461409</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1702270461409</updated>
+    </task>
+    <servers />
+  </component>
+</project>

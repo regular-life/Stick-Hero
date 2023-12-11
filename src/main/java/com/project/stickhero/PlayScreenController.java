@@ -23,8 +23,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import javafx.stage.Stage;
+import javafx.stage.*;
 import javafx.util.Duration;
+import javafx.geometry.*;
+import javafx.scene.effect.*;
+import javafx.stage.StageStyle;
 
 import java.net.URL;
 import java.util.Objects;
@@ -226,6 +229,15 @@ public class PlayScreenController
         return new MediaPlayer(sound);
     }
 
+    private TranslateTransition createAnimation(ImageView imageView) {
+        TranslateTransition animation = new TranslateTransition(Duration.seconds(1), imageView);
+        animation.setByX(400);
+        animation.setCycleCount(Timeline.INDEFINITE);
+        animation.setAutoReverse(true);
+        animation.play();
+        return animation;
+    }
+
     public void initialize() {
 
         cherryCount = cherries ;
@@ -245,6 +257,42 @@ public class PlayScreenController
                 BackgroundPosition.CENTER,
                 BackgroundSize.DEFAULT
         );
+
+        Button pauseButton = new Button("Pause");
+        BackGround.getChildren().add(pauseButton);
+        BorderPane.setAlignment(pauseButton, Pos.CENTER);
+        BorderPane.setMargin(pauseButton, new Insets(5));
+
+//        TranslateTransition animation = createAnimation(Mushroom);
+
+        pauseButton.setOnAction(e -> {
+//            animation.pause();
+            BackGround.setEffect(new GaussianBlur());
+
+            VBox pauseRoot = new VBox(5);
+            pauseRoot.getChildren().add(new Text("Paused"));
+            pauseRoot.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8);");
+            pauseRoot.setAlignment(Pos.CENTER);
+            pauseRoot.setPadding(new Insets(20));
+
+            Button resume = new Button("Resume");
+            pauseRoot.getChildren().add(resume);
+
+            Stage popupStage = new Stage(StageStyle.TRANSPARENT);
+            popupStage.initOwner((Stage) Mushroom.getScene().getWindow());
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.setScene(new Scene(pauseRoot, Color.TRANSPARENT));
+
+            resume.setOnAction(event -> {
+                BackGround.setEffect(null);
+//                animation.play();
+                popupStage.hide();
+            });
+
+            popupStage.show();
+        });
+
+
 
         Background backgroundObject = new Background(background);
         BackGround.setBackground(backgroundObject);
@@ -470,7 +518,7 @@ public class PlayScreenController
         CherryMaker();
 //        System.out.println("ActionButton clicked! EndRectangle width: " + randomWidth + ", position: " + randomPosition);
     }
-    private double clamp(double min, double max, double value) {
+    public double clamp(double min, double max, double value) {
         return Math.max(min, Math.min(max, value));
     }
 
@@ -505,6 +553,7 @@ public class PlayScreenController
             }
         });
     }
+
     public void CherryMaker() {
         BackGround.getChildren().remove(Banana1);
         Banana1 = new ImageView(new Image(getClass().getResourceAsStream("/assets/Banana.png")));
@@ -518,4 +567,34 @@ public class PlayScreenController
         Banana1.toFront();
         BackGround.getChildren().add(Banana1);
     }
-}
+
+    class ShapeFactory {
+        public static Rectangle getShape(String shapeType, Rectangle Block) {//factory methods
+            if (shapeType == null) {
+                return null;
+            } else if (shapeType.equalsIgnoreCase("StartBlock")) {
+                Rectangle StartBlock = new Rectangle();
+                StartBlock.setLayoutX(96 - Block.getWidth());
+                StartBlock.setLayoutY(432);
+                StartBlock.setWidth(Block.getWidth());
+                StartBlock.setHeight(100);
+                StartBlock.setFill(Color.BLACK);
+                StartBlock.toFront();
+                return StartBlock;
+            } else if (shapeType.equalsIgnoreCase("EndBlock")) {
+                Random random = new Random();
+                double randomWidth = random.nextDouble(56, 100);
+                double rr = random.nextDouble(Block.getLayoutX() + Block.getWidth() + 60, 300);
+                Rectangle EndBlock = new Rectangle();
+                EndBlock.setLayoutX(rr);
+                EndBlock.setLayoutY(432);
+                EndBlock.setWidth(randomWidth);
+                EndBlock.setHeight(100);
+                EndBlock.setFill(Color.BLACK);
+                EndBlock.toFront();
+                return EndBlock;
+            }
+            return null;
+        }
+}}
+

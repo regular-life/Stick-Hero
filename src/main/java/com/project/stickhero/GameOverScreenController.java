@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
 
 import java.io.IOException;
 
@@ -33,6 +34,9 @@ public class GameOverScreenController
     @FXML
     private Scene scene ;
 
+    public Button Restart ;
+    public Button Quit ;
+    public Button Revive ;
 
     public AnchorPane getRoot() {
         return root;
@@ -76,7 +80,8 @@ public class GameOverScreenController
 
     public void initialize()
     {
-        highestScoreText.setText(TextFileHandler.readDataFromTextFile());
+        TextFileHandler fileio = new TextFileHandler() ;
+        highestScoreText.setText(fileio.readDataFromTextFile());
         System.out.println(highestScoreText.getText());
         scoreText.setText(String.valueOf(score));
     }
@@ -84,9 +89,10 @@ public class GameOverScreenController
     @FXML
     public void handleRestart(ActionEvent event) throws IOException
     {
-        if (score > Integer.parseInt(highestScoreText.getText()))
+        TextFileHandler fileio = new TextFileHandler() ;
+        if (score > Integer.parseInt(fileio.readDataFromTextFile()))
         {
-            TextFileHandler.addDataToTextFile(String.valueOf(score));
+            fileio.addDataToTextFile(String.valueOf(score));
             highestScoreText.setText(String.valueOf(score));
         }
         score = 0 ;
@@ -103,9 +109,11 @@ public class GameOverScreenController
     @FXML
     public void handleQuit()
     {
-        if (score > Integer.parseInt(highestScoreText.getText()))
+        // check if score is greater than highestScoreText
+        TextFileHandler fileio = new TextFileHandler() ;
+        if (score > Integer.parseInt(fileio.readDataFromTextFile()))
         {
-            TextFileHandler.addDataToTextFile(String.valueOf(score));
+            fileio.addDataToTextFile(String.valueOf(score));
             highestScoreText.setText(String.valueOf(score));
         }
         System.exit(0);

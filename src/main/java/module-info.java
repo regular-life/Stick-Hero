@@ -9,6 +9,7 @@ module com.project.stickhero {
 //    requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires javafx.media;
+    requires junit;
 
     opens com.project.stickhero to javafx.fxml;
     exports com.project.stickhero;
