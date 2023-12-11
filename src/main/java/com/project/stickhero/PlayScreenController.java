@@ -6,9 +6,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -268,11 +266,25 @@ public class PlayScreenController
         pauseButton.setOnAction(e -> {
 //            animation.pause();
 
-//            bridgeGrowthTimeline.pause();
-//            bridgeRotate.pause();
-//            MushroomTimeline.pause();
-//            startBlockTranslate.pause();
-//            endBlockTranslate.pause();
+            if (bridgeGrowthTimeline.getStatus() == Animation.Status.RUNNING) {
+                bridgeGrowthTimeline.pause();
+            }
+
+            if (bridgeRotate.getStatus() == Animation.Status.RUNNING) {
+                bridgeRotate.pause();
+            }
+
+            if (MushroomTimeline != null && MushroomTimeline.getStatus() == Animation.Status.RUNNING) {
+                MushroomTimeline.pause();
+            }
+
+            if (startBlockTranslate != null && startBlockTranslate.getStatus() == Animation.Status.RUNNING) {
+                startBlockTranslate.pause();
+            }
+
+            if (endBlockTranslate != null && endBlockTranslate.getStatus() == Animation.Status.RUNNING) {
+                endBlockTranslate.pause();
+            }
 
             BackGround.setEffect(new GaussianBlur());
 
@@ -293,12 +305,25 @@ public class PlayScreenController
             resume.setOnAction(event -> {
                 BackGround.setEffect(null);
 //                animation.play();
+                if (bridgeGrowthTimeline.getStatus() == Animation.Status.PAUSED) {
+                    bridgeGrowthTimeline.play();
+                }
 
-//                bridgeGrowthTimeline.play();
-//                bridgeRotate.play();
-//                MushroomTimeline.play();
-//                startBlockTranslate.play();
-//                endBlockTranslate.play();
+                if (bridgeRotate.getStatus() == Animation.Status.PAUSED) {
+                    bridgeRotate.play();
+                }
+
+                if (MushroomTimeline != null && MushroomTimeline.getStatus() == Animation.Status.PAUSED) {
+                    MushroomTimeline.play();
+                }
+
+                if (startBlockTranslate != null && startBlockTranslate.getStatus() == Animation.Status.PAUSED) {
+                    startBlockTranslate.play();
+                }
+
+                if (endBlockTranslate != null && endBlockTranslate.getStatus() == Animation.Status.PAUSED) {
+                    endBlockTranslate.play();
+                }
 
                 popupStage.hide();
             });
