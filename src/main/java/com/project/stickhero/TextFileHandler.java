@@ -5,7 +5,9 @@ import java.io.*;
 public class TextFileHandler
 {
 
-    private static final String TEXT_FILE_PATH = "/home/yash/Downloads/Stick-Hero/src/main/java/com/project/stickhero/HighestScore";
+//    private static final String TEXT_FILE_PATH = "/home/yash/Downloads/Stick-Hero/src/main/java/com/project/stickhero/HighestScore";
+
+    private static final String TEXT_FILE_PATH = System.getProperty("user.home") + "/Downloads/Stick-Hero/src/main/java/com/project/stickhero/HighestScore";
 
     public static void addDataToTextFile(String data)
     {
