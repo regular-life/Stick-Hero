@@ -267,6 +267,13 @@ public class PlayScreenController
 
         pauseButton.setOnAction(e -> {
 //            animation.pause();
+
+//            bridgeGrowthTimeline.pause();
+//            bridgeRotate.pause();
+//            MushroomTimeline.pause();
+//            startBlockTranslate.pause();
+//            endBlockTranslate.pause();
+
             BackGround.setEffect(new GaussianBlur());
 
             VBox pauseRoot = new VBox(5);
@@ -286,6 +293,13 @@ public class PlayScreenController
             resume.setOnAction(event -> {
                 BackGround.setEffect(null);
 //                animation.play();
+
+//                bridgeGrowthTimeline.play();
+//                bridgeRotate.play();
+//                MushroomTimeline.play();
+//                startBlockTranslate.play();
+//                endBlockTranslate.play();
+
                 popupStage.hide();
             });
 

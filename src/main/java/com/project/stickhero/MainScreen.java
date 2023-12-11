@@ -14,7 +14,6 @@ import java.net.URL;
 
 public class MainScreen extends Application
 {
-
     Scene scene ;
     public static void main(String[] args)
     {
