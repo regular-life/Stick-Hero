@@ -84,11 +84,38 @@ The Stick Hero game consists of multiple classes, each responsible for a specifi
 
 ## Screen Connection Map
 ```
-+---------------------+          +------------------------+          +-----------------------+
-|    MainScreen      |   start  |    PlayScreen          |   game   |    GameOverScreen     |
-|---------------------| -------->|------------------------| -------->|-----------------------|
-| MainScreenController|          | PlayScreenController   |          | GameOverScreenController|
-+---------------------+          +------------------------+          +-----------------------+
++---------------------+    Play    +------------------------+   Game   +-----------------------+
+|    Main Screen      | ---------->|      Play Screen       | -------->|      Exit Screen      |
+|---------------------|            |------------------------|          |-----------------------|
+|  Options:           |            | Options:               |          | Options:              |
+|   - Play            |            |   - Pause              |          |   - Revive            |
+|   - Exit            |            |   - Build Bridge       |          |   - Restart           |
+|                     |            |   - Flip               |          |   - Exit              |
+|                     |            |                        |          |                       |
++---------------------+            +------------------------+          +-----------------------+
+                                        |   Pause                |              |   Revive            |
+                                        |------------------------|              |---------------------|
+                                        | Options:               |              |  Cherries >= 5?     |
+                                        |   - Resume             |              |      |              |
+                                        |                        |              |      |              |
+                                        +------------------------+              |      |              |
+                                                                                |      |              |
+                                                                                |      |              |
+                                                                                |      v              |
+                                                                                |  Redirect to        |
+                                                                                |  Play Screen        |
+                                                                                |  with previous      |
+                                                                                |  score              |
+                                                                                +---------------------+
+
+                                                                                +---------------------+
+                                                                                |    Restart          |
+                                                                                |---------------------|
+                                                                                | Reset score to 0    |
+                                                                                | Redirect to Play    |
+                                                                                | Screen              |
+                                                                                +---------------------+
+
 ```
 
 ## Testing
