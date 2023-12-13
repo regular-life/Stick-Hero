@@ -15,7 +15,9 @@ Stick Hero is a simple Java game developed using JavaFX. It provides an engaging
 ## How to Run the Game
 1. **Prerequisites:**
    - Java Development Kit (JDK) installed on your computer.
-   - Apache Maven installed.
+   - Apache Maven installed if you wish to run using Maven commands, else you need some IDE like IntelliJ IDEA.
+   - JavaFX installed.
+   - JUnit installed if you wish to run TestRunner.java file.
 
 2. **Cloning the Repository:**
    - Clone the repository to your local machine using the following command:
@@ -25,7 +27,7 @@ Stick Hero is a simple Java game developed using JavaFX. It provides an engaging
      **OR**
    - Download the .zip file from https://github.com/regular-life/Stick-Hero.
 
-3. **Running the Game:**
+3. **Running the Game using Maven commands:**
    - Open a terminal.
    - Navigate to the project directory.
    - Run the following Maven commands:
@@ -36,9 +38,10 @@ Stick Hero is a simple Java game developed using JavaFX. It provides an engaging
     ```bash
     mvn clean
     ```
+4. **Running the Game using IDE:**
    - Alternatively, you can run the game directly from the IDE by locating the `MainScreen.java` file and running `MainScreen.main()`.
 
-4. **Playing the Game:**
+5. **Playing the Game:**
    - Use button controls to navigate and jump in the game.
    - Collect cherries and avoid falling off the platforms.
    - Try to achieve the highest score.
