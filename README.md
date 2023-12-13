@@ -35,9 +35,9 @@ Stick Hero is a simple Java game developed using JavaFX. It provides an engaging
      mvn javafx:run
      ```
    - To clean the JAR files, run the following:
-    ```bash
-    mvn clean
-    ```
+     ```bash
+     mvn clean
+     ```
 4. **Running the Game using IDE:**
    - Alternatively, you can run the game directly from the IDE by locating the `MainScreen.java` file and running `MainScreen.main()`.
 
